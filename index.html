@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>7-Day Countdown</title>
+  <title>Countdown to April 3rd, 09:00 PM</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f0f0;
       display: flex;
       justify-content: center;
-      margin-top: 40px;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
     }
     .countdown {
       background-color: #fff;
@@ -31,36 +33,26 @@
   </div>
 
   <script>
-    // Try to retrieve the stored end time from localStorage
-    let endTime = localStorage.getItem("countdownEndTime");
-
-    // If no end time is stored, calculate it and store it in localStorage
-    if (!endTime) {
-      const totalSeconds = 7 * 24 * 60 * 60; // Total seconds in 7 days
-      endTime = new Date().getTime() + totalSeconds * 1000;
-      localStorage.setItem("countdownEndTime", endTime);
-    } else {
-      endTime = Number(endTime);
-    }
+    // Set the target date and time: April 3rd at 09:00 PM.
+    // Adjust the date string format if needed for your locale.
+    const targetDate = new Date("April 3, 2025 21:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
-      let timeLeft = Math.floor((endTime - now) / 1000);
+      let timeLeft = Math.floor((targetDate - now) / 1000);
 
       if (timeLeft < 0) {
         document.getElementById("time").innerHTML = "Countdown Ended";
-        // Optionally, clear the stored end time to allow a new countdown to start later
-        localStorage.removeItem("countdownEndTime");
         clearInterval(timer);
         return;
       }
 
-      // Calculate total hours (remaining seconds divided by 3600)
+      // Calculate total hours from the remaining seconds
       const hours = Math.floor(timeLeft / 3600);
       timeLeft %= 3600;
-      // Calculate minutes
+      // Calculate minutes from the remaining seconds
       const minutes = Math.floor(timeLeft / 60);
-      // Calculate seconds
+      // Calculate the remaining seconds
       const seconds = timeLeft % 60;
 
       // Display the countdown in the format: Hours : Minutes : Seconds
