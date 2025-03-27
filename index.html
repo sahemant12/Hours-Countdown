@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7-Day Countdown</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .countdown {
+      background-color: #fff;
+      padding: 20px 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .countdown div {
+      font-size: 2em;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown">
+    <div id="time"></div>
+  </div>
+
+  <script>
+    // Try to retrieve the stored end time from localStorage
+    let endTime = localStorage.getItem("countdownEndTime");
+
+    // If no end time is stored, calculate it and store it in localStorage
+    if (!endTime) {
+      const totalSeconds = 7 * 24 * 60 * 60; // Total seconds in 7 days
+      endTime = new Date().getTime() + totalSeconds * 1000;
+      localStorage.setItem("countdownEndTime", endTime);
+    } else {
+      endTime = Number(endTime);
+    }
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      let timeLeft = Math.floor((endTime - now) / 1000);
+
+      if (timeLeft < 0) {
+        document.getElementById("time").innerHTML = "Countdown Ended";
+        // Optionally, clear the stored end time to allow a new countdown to start later
+        localStorage.removeItem("countdownEndTime");
+        clearInterval(timer);
+        return;
+      }
+
+      // Calculate total hours (remaining seconds divided by 3600)
+      const hours = Math.floor(timeLeft / 3600);
+      timeLeft %= 3600;
+      // Calculate minutes
+      const minutes = Math.floor(timeLeft / 60);
+      // Calculate seconds
+      const seconds = timeLeft % 60;
+
+      // Display the countdown in the format: Hours : Minutes : Seconds
+      document.getElementById("time").innerHTML =
+        hours + " Hours : " + minutes + " Minutes : " + seconds + " Seconds";
+    }
+
+    // Update the countdown every second
+    const timer = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
